@@ -59,4 +59,8 @@ class OfflineContactsRepository(
             Json.decodeFromString(jsonString)
         }
     }
+
+    override fun getContactsByNameStream(name: String): Flow<List<Contact>> {
+        return contactDao.getContactsByName(name)
+    }
 }

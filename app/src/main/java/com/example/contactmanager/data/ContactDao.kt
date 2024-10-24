@@ -28,4 +28,8 @@ interface ContactDao {
 
     @Query("SELECT*FROM contacts WHERE id=:id")
     fun getContactById(id: Int): Flow<Contact>
+
+    @Query("SELECT * FROM contacts WHERE name LIKE '%' || :name || '%'")
+    fun getContactsByName(name: String): Flow<List<Contact>>
+
 }

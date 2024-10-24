@@ -52,7 +52,14 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val homeUiState by viewModel.homeUiState.collectAsState()
+//    val homeUiState by viewModel.homeUiState.collectAsState()
+//    val homeUiState by viewModel.searchContacts().collectAsState()
+    val homeUiState by if (viewModel.searchQuery.isEmpty()) {
+        viewModel.homeUiState.collectAsState() // Lấy toàn bộ danh sách khi không tìm kiếm
+    } else {
+        viewModel.searchContacts().collectAsState() // Chỉ tìm kiếm khi có query
+    }
+
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -60,7 +67,10 @@ fun HomeScreen(
             ContactManagerTopAppBar(
                 title = stringResource(HomeDestination.titleRes),
                 canNavigateBack = false,
-                scrollBehavior = scrollBehavior
+                scrollBehavior = scrollBehavior,
+                onSearchQueryChanged = { query ->
+                    viewModel.updateSearchQuery(query)
+                }
             )
         },
         floatingActionButton = {

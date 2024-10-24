@@ -11,4 +11,6 @@ interface ContactsRepository {
 
     // Thêm hàm để đọc và chèn danh bạ từ file JSON
     suspend fun populateContactsFromJson(fileName: String): Result<Unit>
+
+    fun getContactsByNameStream(name: String): Flow<List<Contact>>
 }
